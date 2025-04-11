@@ -1,0 +1,75 @@
+esp32:
+    board: esp32-c3-devkitm-1
+    framework:
+        type: arduino
+    
+api:
+  services:
+  - service: play_rtttl
+    variables:
+      song_str: string
+    then:
+      - rtttl.play:
+          rtttl: !lambda 'return song_str;'    
+
+logger:
+
+ota:
+  - platform: esphome
+
+wifi:
+  power_save_mode: none
+  ap:
+    ssid: "Divine Hotspot"
+
+output:  
+  - platform: ledc
+    pin: GPIO3
+    id: buzzer
+
+rtttl:
+  output: buzzer
+  id: my_rtttl
+  gain: 10%
+  on_finished_playback:
+    - logger.log: 'Song ended!'
+
+captive_portal:
+    
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO6
+      mode: INPUT_PULLUP
+    name: ${friendly_name} Door
+    filters:
+      - delayed_on_off: 100ms
+    device_class: door
+
+sensor:
+  - platform: dht
+    model: DHT22
+    pin: 
+      number: GPIO5
+    temperature:
+      name: "${friendly_name} Temp"
+      accuracy_decimals: 1
+    humidity:
+      name: "${friendly_name} Hum"
+      accuracy_decimals: 1
+    update_interval: 60s
+
+light:
+  - platform: neopixelbus
+    id: rgb_light
+    type: GRB
+    variant: WS2812X
+    method: ESP32_RMT_1
+    num_leds: 1
+    pin: GPIO20
+    name: "${friendly_name} Light"
+
+button:
+  - platform: restart
+    icon: mdi:power-cycle
+    name: "ESP Reboot"
