@@ -1,0 +1,25 @@
+substitutions:
+  name: my-multisens
+  friendly_name: My MultiSens
+
+esphome:
+  name: ${name}
+  name_add_mac_suffix: false
+  friendly_name: ${friendly_name}
+
+packages:
+  MyPcb: !include mypcb.yaml
+
+logger:
+
+api:
+  encryption:
+    key: ""
+
+ota:
+  - platform: esphome
+    password: ""
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
