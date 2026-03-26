@@ -73,3 +73,15 @@ button:
   - platform: restart
     icon: mdi:power-cycle
     name: "ESP Reboot"
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+      icon: "mdi:ip-network"
+    ssid:
+      name: Connected SSID
+      icon: "mdi:wifi"
+    dns_address:
+      name: DNS Address
+      icon: "mdi:dns"
